@@ -1,0 +1,100 @@
+﻿@model List<Web.SHC.Models.Character>
+
+@{
+    ViewBag.Title = "CharatcterList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int counter = 1;
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+
+<div>
+    <h2 style="color:red; text-decoration:underline; font-size:30px; text-shadow:1px 1px blue;">Characters</h2>
+    <form>
+        <div class="row">
+            <div class="col-md-10">
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-danger" href="/SuperHeroes/CharacterEdit" data-toggle="modal" data-target="#myModal"> Add New Character </a>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="tbl-main table-responsive">
+    <table id="table_id" class="table table-bordered table-striped">
+        <thead>
+            <tr class="tablehead">
+                <th>#</th>
+                <th>Name</th>
+                <th>BIO</th>
+                <th>Abilities</th>
+                <th>Images</th>
+                <th>Edit</th>
+                <th>Del</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var character in Model)
+            {
+            <tr>
+                <td>@(counter++)</td>
+                <td> <a class="btn-link" href="/SuperHeroes/CharacterDetail?characterID=@character.CharacterID" data-toggle="modal" data-target="#myModal"> @character.Name </a> </td>
+                <td>@character.Bio</td>
+                <td class="tablegreen">@character.Abilities</td>
+                <td><img style="width:100px; height:100px" src="~/@character.Image" /></td>
+                <td> <a class="btn btn-xs btn-primary" href="/SuperHeroes/CharacterEdit?characterID=@character.CharacterID" data-toggle="modal" data-target="#myModal"> Edit </a> </td>
+                <td> <a class="btn btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this character?')" href="/SuperHeroes/CharacterDelete?characterID=@character.CharacterID&imageAddress=@character.Image"> Del </a> </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        $("#char").on("click", function () {
+            $("#char").addClass("Active");
+            $("#movie").removeClass("Atrive");
+        });
+        $("#movie").on("click", function () {
+            $("#char").removeClass("Active");
+            $("#movie").addClass("Active");
+        });
+
+        $('#table_id').DataTable();
+
+        $("#myModal").on("hidden.bs.modal", function () {
+            location.reload();
+        });
+        
+    });
+
+    function readURL(input) {
+        $("#img").hide();
+        $("#displayimage").append("<img style='padding-top:5px' id='blah' src='#' />")
+        
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+

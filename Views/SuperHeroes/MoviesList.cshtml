@@ -1,0 +1,91 @@
+﻿@model List<Web.SHC.Models.Movies>
+@{
+    ViewBag.Title = "MoviesList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int counter = 2;
+}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<div>
+    <h2 style="color:red; text-decoration:underline; font-size:30px; text-shadow:1px 1px blue;">Movies</h2>
+    <form>
+        <div class="row">
+            <div class="col-md-10">
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-danger" href="/SuperHeroes/MovieEdit" data-toggle="modal" data-target="#myModal"> Add New Movie </a>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="tbl-main table-responsive">
+    <table id="table_id" class="table table-bordered table-striped">
+        <thead>
+            <tr class="tablehead">
+                <th>#</th>
+                <th>Title</th>
+                <th>Plot Summary</th>
+                <th>Year</th>
+                <th>IMDB Rating</th>
+                <th>Images</th>
+                <th>Edit</th>
+                <th>Del</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var movie in Model)
+            {
+            <tr>
+                <td>@(counter++)</td>
+                <td> <a class="btn-link" href="/SuperHeroes/MovieDetail?MovieID=@movie.MoviesID" data-toggle="modal" data-target="#myModal"> @movie.Title </a> </td>
+                <td>@movie.PlotSummary</td>
+                <td class="tablered">@movie.Year</td>
+                <td class="tablegreen">@movie.Rating</td>
+                <td><img style="width:100px; height:100px" src="~/@movie.Image" /></td>
+                <td> <a class="btn btn-xs btn-primary" href="/SuperHeroes/MovieEdit?movieID=@movie.MoviesID" data-toggle="modal" data-target="#myModal"> Edit </a> </td>
+                <td> <a class="btn btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this character?')" href="/SuperHeroes/MovieDelete?movieID=@movie.MoviesID&imageAddress=@movie.Image"> Del </a></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#table_id').DataTable();
+
+        $("#myModal").on("hidden.bs.modal", function () {
+            location.reload();
+        });
+    });
+    function readURL(input) {
+        $("#img").hide();
+        $("#displayimage").append("<img style='padding-top:5px' id='blah' src='#' />")
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+</script>
+
+
+
+
